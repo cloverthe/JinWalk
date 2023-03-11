@@ -9,29 +9,27 @@ import org.apache.commons.cli.ParseException;
 import org.jinwalk.readers.JinReader;
 
 public class CliHelper {
-    private Options options;
     CommandLine cmd = null;
     CommandLineParser parser = new DefaultParser();
-    public CliHelper(String [] args) {
+    private Options options;
+
+    public CliHelper(String[] args) throws Exception {
         options = new Options();
         Option file = Option.builder("f").longOpt("file").argName("file").hasArg().desc("file to read").build();
         options.addOption(file);
         try {
-           cmd = parser.parse(options, args);
-           if(cmd.hasOption("f")){
-               handleReadFile(cmd.getOptionValue("f"));
-           }
+            cmd = parser.parse(options, args);
+            if (cmd.hasOption("f")) {
+                handleReadFile(cmd.getOptionValue("f"));
+            }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    private void handleReadFile(String path) {
+    private void handleReadFile(String path) throws Exception {
         JinReader reader = new JinReader(path);
     }
 
-    public Options getOptions() {
-        return options;
-    }
 }
