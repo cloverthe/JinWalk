@@ -1,4 +1,4 @@
-package org.jinwalk;
+package org.jinwalk.readers;
 
 
 import org.slf4j.Logger;
@@ -11,8 +11,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class JinReader {
-    private static final Logger logger
-            = LoggerFactory.getLogger(JinReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(JinReader.class);
     FileInputStream file;
     DataInputStream data;
     public JinReader(String path) {
