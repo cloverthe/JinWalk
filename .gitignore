@@ -11,6 +11,8 @@ target/
 *.iws
 *.iml
 *.ipr
+git_toolbox_prj.xml
+*index.pb
 
 ### Eclipse ###
 .apt_generated

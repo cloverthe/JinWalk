@@ -3,6 +3,9 @@ package org.jinwalk.magic;
 import java.util.Arrays;
 import java.util.StringJoiner;
 
+/**
+ * Entity containing the signature itself and its description
+ */
 public class Signature {
 
     private byte[] signature;
