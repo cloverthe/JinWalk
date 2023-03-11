@@ -7,14 +7,16 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.jinwalk.readers.JinReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CliHelper {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CliHelper.class);
     CommandLine cmd = null;
     CommandLineParser parser = new DefaultParser();
-    private Options options;
 
     public CliHelper(String[] args) throws Exception {
-        options = new Options();
+        Options options = new Options();
         Option file = Option.builder("f").longOpt("file").argName("file").hasArg().desc("file to read").build();
         options.addOption(file);
         try {
@@ -23,13 +25,13 @@ public class CliHelper {
                 handleReadFile(cmd.getOptionValue("f"));
             }
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            LOGGER.error(e.getMessage());
         }
 
     }
 
     private void handleReadFile(String path) throws Exception {
-        JinReader reader = new JinReader(path);
+        new JinReader(path);
     }
 
 }
