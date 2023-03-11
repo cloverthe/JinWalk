@@ -7,19 +7,20 @@ import org.jinwalk.magic.Signature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class JinReader {
     private static final Logger logger = LoggerFactory.getLogger(JinReader.class);
-    private static final String RESOURCES_SIGNATURES_CSV = "resources/signatures.csv";
 
     public JinReader(String path) {
 
@@ -35,6 +36,9 @@ public class JinReader {
             assert file != null;
             try (DataInputStream data = new DataInputStream(file)) {
                 signatures = initializeSignatures();
+                if (signatures.isEmpty()) {
+                    logger.error("Couldn't parse signatures file, or it's empty");
+                }
                 fileRaw = data.readAllBytes();
             }
         } catch (IOException e) {
@@ -52,9 +56,9 @@ public class JinReader {
     }
 
     private List<Signature> initializeSignatures() throws IOException {
-        File signaturesFile = new File(RESOURCES_SIGNATURES_CSV);
-
-        try (CSVReader reader = new CSVReader(new FileReader(signaturesFile))) {
+        InputStream in = getClass().getResourceAsStream("/signatures.csv");
+        BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(in)));
+        try (CSVReader reader = new CSVReader(br)) {
             reader.skip(1);
             List<Signature> signatures = new ArrayList<>();
 
