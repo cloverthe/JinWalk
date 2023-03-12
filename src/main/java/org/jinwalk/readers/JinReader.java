@@ -22,6 +22,7 @@ import java.util.Objects;
 
 public class JinReader {
     private static final Logger logger = LoggerFactory.getLogger(JinReader.class);
+    private static long offsetFile = 0;
 
     public JinReader(String path) {
 
@@ -47,23 +48,24 @@ public class JinReader {
         }
         assert signatures != null;
         for (Signature signature : signatures) {
-            handleSignatureCheck(fileRaw, signature, 0);
+            handleSignatureCheck(fileRaw, signature);
         }
 
     }
 
-    private static void handleSignatureCheck(byte[] fileRaw, Signature signature, int initialIndex) {
+    private static void handleSignatureCheck(byte[] fileRaw, Signature signature) {
         int newIndex = Bytes.indexOf(fileRaw, signature.getSignature());
         if (newIndex != -1) {
-            logger.info("Found {} at index {}", signature.getDescription(), newIndex);
-            if (newIndex != initialIndex) {
-                // need probably to make this variable local, not sure how it works with recursion
-                fileRaw = Arrays.copyOfRange(fileRaw, newIndex, fileRaw.length);
-                handleSignatureCheck(fileRaw, signature, newIndex);
+            offsetFile += newIndex;
+            if (newIndex != 0) {
+                offsetFile += signature.getSignature().length;
             }
-
+            String offsetHex = Long.toHexString(offsetFile).toUpperCase();
+            newIndex += signature.getSignature().length;
+            logger.info("Found: {}, offset: DEC: {}, HEX: {}", signature.getDescription(), offsetFile, offsetHex);
+            fileRaw = Arrays.copyOfRange(fileRaw, newIndex, fileRaw.length);
+            handleSignatureCheck(fileRaw, signature);
         }
-
     }
 
     private List<Signature> initializeSignatures() throws IOException {
