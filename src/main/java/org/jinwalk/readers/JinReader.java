@@ -22,7 +22,7 @@ import java.util.Objects;
 
 public class JinReader {
     private static final Logger logger = LoggerFactory.getLogger(JinReader.class);
-    private static long offsetFile = 0;
+    private long offsetFile = 0;
     private List<Signature> signatures = null;
     private byte[] fileRaw = new byte[0];
 
@@ -50,7 +50,7 @@ public class JinReader {
 
     }
 
-    private static void handleSignatureCheck(byte[] fileRaw, Signature signature) {
+    private void handleSignatureCheck(byte[] fileRaw, Signature signature) {
         int newIndex = Bytes.indexOf(fileRaw, signature.getSignature());
         if (newIndex != -1) {
             offsetFile += newIndex;
@@ -65,7 +65,7 @@ public class JinReader {
         }
     }
 
-    private static void reset() {
+    private void reset() {
         offsetFile = 0;
     }
 
