@@ -15,7 +15,7 @@ public class CliHelper {
     CommandLine cmd = null;
     CommandLineParser parser = new DefaultParser();
 
-    public CliHelper(String[] args) throws Exception {
+    public CliHelper(String[] args) {
         Options options = new Options();
         Option file = Option.builder("f").longOpt("file").argName("file").hasArg().desc("file to read").build();
         options.addOption(file);
@@ -30,8 +30,9 @@ public class CliHelper {
 
     }
 
-    private void handleReadFile(String path) throws Exception {
-        new JinReader(path);
+    private void handleReadFile(String path) {
+        JinReader reader = new JinReader(path);
+        reader.analyze();
     }
 
 }

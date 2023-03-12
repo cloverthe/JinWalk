@@ -23,6 +23,8 @@ import java.util.Objects;
 public class JinReader {
     private static final Logger logger = LoggerFactory.getLogger(JinReader.class);
     private static long offsetFile = 0;
+    private List<Signature> signatures = null;
+    private byte[] fileRaw = new byte[0];
 
     public JinReader(String path) {
 
@@ -32,8 +34,7 @@ public class JinReader {
         } catch (FileNotFoundException e) {
             logger.error(e.getMessage());
         }
-        List<Signature> signatures = null;
-        byte[] fileRaw = new byte[0];
+
         try {
             assert file != null;
             try (DataInputStream data = new DataInputStream(file)) {
@@ -45,10 +46,6 @@ public class JinReader {
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
-        }
-        assert signatures != null;
-        for (Signature signature : signatures) {
-            handleSignatureCheck(fileRaw, signature);
         }
 
     }
@@ -68,12 +65,16 @@ public class JinReader {
         }
     }
 
+    private static void reset() {
+        offsetFile = 0;
+    }
+
     private List<Signature> initializeSignatures() throws IOException {
         InputStream in = getClass().getResourceAsStream("/signatures.csv");
         BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(in)));
         try (CSVReader reader = new CSVReader(br)) {
             reader.skip(1);
-            List<Signature> signatures = new ArrayList<>();
+            signatures = new ArrayList<>();
 
             // read line by line
             String[] csvRecord;
@@ -89,5 +90,13 @@ public class JinReader {
             logger.error(e.getMessage());
         }
         return Collections.emptyList();
+    }
+
+    public void analyze() {
+        assert signatures != null;
+        for (Signature signature : signatures) {
+            reset();
+            handleSignatureCheck(fileRaw, signature);
+        }
     }
 }
