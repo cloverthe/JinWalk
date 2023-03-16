@@ -1,5 +1,7 @@
 package org.jinwalk.magic;
 
+import org.apache.commons.codec.binary.Hex;
+
 import java.util.Arrays;
 import java.util.StringJoiner;
 
@@ -8,23 +10,23 @@ import java.util.StringJoiner;
  */
 public class Signature {
 
-    private byte[] signature;
+    private byte[] signatureInHex;
     private String description;
 
     public Signature() {
-    }
-
-    public Signature(byte[] signature, String description) {
-        this.signature = signature;
-        this.description = description;
+        // constructor
     }
 
     public byte[] getSignature() {
-        return signature;
+        return signatureInHex;
     }
 
-    public void setSignature(byte[] signature) {
-        this.signature = signature;
+    public void setSignature(byte[] signatureInHex) {
+        this.signatureInHex = signatureInHex;
+    }
+
+    public String getEncodedSignature() {
+        return Hex.encodeHexString(this.getSignature()).toUpperCase();
     }
 
     public String getDescription() {
@@ -37,6 +39,6 @@ public class Signature {
 
     @Override public String toString() {
         return new StringJoiner(", ", Signature.class.getSimpleName() + "[", "]").add(
-                "signature=" + Arrays.toString(signature)).add("description='" + description + "'").toString();
+                "signature=" + Arrays.toString(signatureInHex)).add("description='" + description + "'").toString();
     }
 }

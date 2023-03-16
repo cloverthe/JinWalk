@@ -30,10 +30,10 @@ public class JinReader {
             fileRaw = Files.readAllBytes(Paths.get(path));
             signatures = initializeSignatures();
             if (signatures.isEmpty()) {
-                logger.error("Couldn't parse signatures file, or it's empty");
+                logger.error("Couldn't parse signatures file, or it's empty ");
             }
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error("Error:", e);
         }
     }
 
@@ -46,7 +46,8 @@ public class JinReader {
             }
             String offsetHex = Long.toHexString(offsetFile).toUpperCase();
             newIndex += signature.getSignature().length;
-            logger.info("Found: {}, offset: DEC: {}, HEX: {}", signature.getDescription(), offsetFile, offsetHex);
+            logger.info("Found: {} - {}, offset: DEC: {}, HEX: {}", signature.getDescription(),
+                    signature.getEncodedSignature(), offsetFile, offsetHex);
             fileRaw = Arrays.copyOfRange(fileRaw, newIndex, fileRaw.length);
             handleSignatureCheck(fileRaw, signature);
         }
@@ -62,7 +63,7 @@ public class JinReader {
                 CSVReader reader = new CSVReader(br)) {
 
             reader.skip(1);
-            List<Signature> signatures = new ArrayList<>();
+            List<Signature> signsignatureList = new ArrayList<>();
 
             // read line by line
             String[] csvRecord;
@@ -70,11 +71,11 @@ public class JinReader {
                 Signature signature = new Signature();
                 signature.setSignature(Hex.decodeHex(csvRecord[0]));
                 signature.setDescription(csvRecord[1]);
-                signatures.add(signature);
+                signsignatureList.add(signature);
             }
-            return signatures;
+            return signsignatureList;
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error("Error:", e);
             return Collections.emptyList();
         }
     }

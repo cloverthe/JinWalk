@@ -1,3 +1,45 @@
-signature, description
+signature,description
 89504E470D0A1A0A,PNG file
 53514C69746520666F726D6174203300,SQLite Database
+25504446,PDF file
+FFD8FF, JPEG file
+4749463837,GIF87a file
+4749463839,GIF89a file
+49492A00,TIFF file (Little-endian)
+4D4D002A,TIFF file (Big-endian)
+4D546864,MIDI file
+0000002066747970,MP4 file (ISO Base Media File)
+000001BA,MPEG file (PS)
+000001B3,MPEG file (PS)
+494433,MP3 file (ID3v2 tag)
+504B0304,Zip file
+504B0506,Zip file (empty)
+504B0708,Zip file (spanned)
+526172211A0700,RAR file (RAR 5.0 or newer)
+526172211A070100,RAR file (RAR 4.x or older)
+FD377A585A00,ZIPX file
+7F454C46,ELF file (Unix/Linux executable)
+CAFEBABE,Java class file
+38425053,Adobe Photoshop (PSD) file
+377ABCAF271C,7z archive file
+2142444E,DjVu file
+4F676753,Ogg container format
+3C3F786D6C20,XML file
+1F8B08,GZIP compressed file
+1F9D90,Z Compressed file (compress)
+1FA0A0,Z Compressed file (compress)
+780173,XZ compressed file
+FD377A37A6,Zstandard compressed file
+04034B50,PKZIP archive
+0A0D0AFF,PCX file
+435753,CWS (SWF) file (compressed)
+465753,FWS (SWF) file (uncompressed)
+435753,CWS (SWF) file (compressed)
+66747970,ISO Base Media File (QuickTime, etc.)
+75737461,USTAR Tarball file
+D0CF11E0A1B11AE1,Microsoft Office (DOC, XLS, PPT) - Compound File Binary Format
+504B030414000600,Microsoft Office (DOCX, XLSX, PPTX) - Office Open XML Format
+2321415353492044656C696D69746564,CSV file (ASCII delimited)
+7B5C727466,RTF file (Rich Text Format)
+494E5344,InstallShield installer file
+4C00000001140200,Windows shortcut file (LNK)
