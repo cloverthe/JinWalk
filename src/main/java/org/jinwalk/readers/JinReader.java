@@ -8,12 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,31 +22,19 @@ import java.util.Objects;
 public class JinReader {
     private static final Logger logger = LoggerFactory.getLogger(JinReader.class);
     private long offsetFile = 0;
-    private List<Signature> signatures = null;
-    private byte[] fileRaw = new byte[0];
+    private List<Signature> signatures;
+    private byte[] fileRaw;
 
     public JinReader(String path) {
-
-        FileInputStream file = null;
         try {
-            file = new FileInputStream(path);
-        } catch (FileNotFoundException e) {
-            logger.error(e.getMessage());
-        }
-
-        try {
-            assert file != null;
-            try (DataInputStream data = new DataInputStream(file)) {
-                signatures = initializeSignatures();
-                if (signatures.isEmpty()) {
-                    logger.error("Couldn't parse signatures file, or it's empty");
-                }
-                fileRaw = data.readAllBytes();
+            fileRaw = Files.readAllBytes(Paths.get(path));
+            signatures = initializeSignatures();
+            if (signatures.isEmpty()) {
+                logger.error("Couldn't parse signatures file, or it's empty");
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-
     }
 
     private void handleSignatureCheck(byte[] fileRaw, Signature signature) {
@@ -69,16 +56,16 @@ public class JinReader {
         offsetFile = 0;
     }
 
-    private List<Signature> initializeSignatures() throws IOException {
-        InputStream in = getClass().getResourceAsStream("/signatures.csv");
-        BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(in)));
-        try (CSVReader reader = new CSVReader(br)) {
+    private List<Signature> initializeSignatures() {
+        try (InputStream in = getClass().getResourceAsStream("/signatures.csv");
+                BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(in)));
+                CSVReader reader = new CSVReader(br)) {
+
             reader.skip(1);
-            signatures = new ArrayList<>();
+            List<Signature> signatures = new ArrayList<>();
 
             // read line by line
             String[] csvRecord;
-
             while ((csvRecord = reader.readNext()) != null) {
                 Signature signature = new Signature();
                 signature.setSignature(Hex.decodeHex(csvRecord[0]));
@@ -88,12 +75,11 @@ public class JinReader {
             return signatures;
         } catch (Exception e) {
             logger.error(e.getMessage());
+            return Collections.emptyList();
         }
-        return Collections.emptyList();
     }
 
     public void analyze() {
-        assert signatures != null;
         for (Signature signature : signatures) {
             reset();
             handleSignatureCheck(fileRaw, signature);
